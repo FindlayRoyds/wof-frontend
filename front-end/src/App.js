@@ -2,7 +2,7 @@ import './App.css';
 import { useState } from 'react';
 import * as three from 'three';
 
-let socket = new WebSocket("wss://findlay-wof.herokuapp.com/0.0.0.0")
+let socket = new WebSocket("wss://findlay-wof-backend.herokuapp.com//0.0.0.0")
 
 socket.addEventListener('open', function (event) {
     socket.send('Hello Server!');
