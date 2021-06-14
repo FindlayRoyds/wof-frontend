@@ -5,7 +5,7 @@ import * as three from 'three';
 let socket = new WebSocket("wss://findlay-wof-backend.herokuapp.com/0.0.0.0")
 
 socket.addEventListener('open', function (event) {
-    socket.send('Hello Server!');
+    
 });
 
 socket.addEventListener('message', function (event) {
@@ -22,7 +22,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight)
 camera.position.setZ(30);
 
-const geometry = new three.TorusGeometry(10, 3, 16, 100)
+/*const geometry = new three.TorusGeometry(10, 3, 16, 100)
 const material = new three.MeshStandardMaterial({
   color: 0xFF6347
 });
@@ -33,17 +33,40 @@ pointLight.position.set(25, 25, 25)
 
 const ambientLight = new three.AmbientLight(0x161616);
 
-scene.add(pointLight, ambientLight)
+scene.add(pointLight, ambientLight)*/
 
 const App = () => {
   const buttonClicked = () => {
-    scene.add(torus)
-    socket.send("hello")
+    /*scene.add(torus)
+    socket.send("hello")*/
   }
 
   return (
-    <Button text="spawn" clicked={() => {buttonClicked()}}/>
+    <div>
+      <LoginScreen/>
+    </div>
   );
+}
+
+const LoginScreen = (props) => {
+  const [inputText, setInputedText] = useState("");
+
+  const login = () => {
+    socket.send(inputText)
+  }
+
+  return (
+    <div>
+      <TextInput text={inputText} onTextInput={(event) => {setInputedText(event.target.value)}}/>
+      <Button text="Enter Name" clicked={() => {console.log(inputText)}}/>
+    </div>
+  )
+}
+
+const TextInput = (props) => {
+  return (
+    <input value={props.text} onChange={(event) => {props.onTextInput(event)}}></input>
+  )
 }
 
 const Button = (props) => {
@@ -53,9 +76,9 @@ const Button = (props) => {
 function animate() {
   requestAnimationFrame(animate);
 
-  torus.rotation.x += 0.1
+  /*torus.rotation.x += 0.1
   torus.rotation.y += 0.05
-  torus.rotation.z += 0.1
+  torus.rotation.z += 0.1*/
 
   renderer.render(scene, camera)
 }
