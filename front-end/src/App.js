@@ -2,6 +2,14 @@ import './App.css';
 import { useState } from 'react';
 import * as three from 'three';
 
+const { REACT_APP_DEPLOYED } = process.env;
+console.log({ REACT_APP_DEPLOYED })
+
+if ({ REACT_APP_DEPLOYED } === "yes") {
+  console.log("1")
+} else {
+  console.log("2")
+}
 let socket = new WebSocket("wss://findlay-wof-backend.herokuapp.com/0.0.0.0")
 
 socket.addEventListener('open', function (event) {
