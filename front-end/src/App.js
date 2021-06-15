@@ -5,7 +5,7 @@ import * as three from 'three';
 let socket = new WebSocket("wss://findlay-wof-backend.herokuapp.com/0.0.0.0")
 
 socket.addEventListener('open', function (event) {
-    
+  
 });
 
 socket.addEventListener('message', function (event) {
