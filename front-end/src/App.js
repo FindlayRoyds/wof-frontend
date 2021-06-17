@@ -2,23 +2,13 @@ import './App.css';
 import { useState } from 'react';
 import * as three from 'three';
 
-const { REACT_APP_DEPLOYED } = process.env;
-console.log({ REACT_APP_DEPLOYED })
-
-if ({ REACT_APP_DEPLOYED } === "yes") {
-  console.log("1")
-} else {
-  console.log("2")
-}
-let socket = new WebSocket("wss://findlay-wof-backend.herokuapp.com/0.0.0.0")
-
-socket.addEventListener('open', function (event) {
-    socket.send("hello");
+/*socket.addEventListener('open', function (event) {
+    //socket.send("hello");
 });
 
 socket.addEventListener('message', function (event) {
     console.log('Message from server ', event.data);
-});
+});*/
 
 const scene = new three.Scene();
 const camera = new three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -42,16 +32,30 @@ pointLight.position.set(25, 25, 25)
 const ambientLight = new three.AmbientLight(0x161616);
 
 scene.add(pointLight, ambientLight)*/
+let websocketURL = "wss://findlay-wof-backend.herokuapp.com/0.0.0.0"
+if (process.env.NODE_ENV === "development") {
+  websocketURL = "ws://localhost:5555"
+}
+console.log("connecting to socket")
+let socket = new WebSocket(websocketURL)
+console.log("new socket")
 
 const App = () => {
-  const buttonClicked = () => {
-    /*scene.add(torus)
-    socket.send("hello")*/
-  }
+  const [rooms, setRooms] = useState([]);
+  
+  socket.addEventListener('message', function (event) {
+      console.log('Message from server ', event.data);
+      const data = JSON.parse(event.data)
+      if (data.TYPE === "LOAD_ROOMS") {
+        setRooms(data.DATA)
+      }
+      return false;
+  });
 
   return (
     <div>
-      <LoginScreen/>
+      <LoginScreen socket={socket}/>
+      <RoomView rooms={rooms}/>
     </div>
   );
 }
@@ -60,13 +64,27 @@ const LoginScreen = (props) => {
   const [inputText, setInputedText] = useState("");
 
   const login = () => {
-    socket.send(inputText)
+    props.socket.send(inputText)
   }
 
   return (
     <div>
       <TextInput text={inputText} onTextInput={(event) => {setInputedText(event.target.value)}}/>
-      <Button text="Enter Name" clicked={() => {console.log(inputText)}}/>
+      <Button text="Enter Name" clicked={() => {login()}}/>
+    </div>
+  )
+}
+
+const RoomView = (props) => {
+  console.log(props.rooms)
+
+  return (
+    <div>
+      {props.rooms.map((room) => 
+        <p>
+          {room}
+        </p>
+      )}
     </div>
   )
 }
