@@ -38,33 +38,40 @@ if (process.env.NODE_ENV === "development") {
 }
 console.log("connecting to socket")
 let socket = new WebSocket(websocketURL)
-console.log("new socket")
 
 const App = () => {
   const [rooms, setRooms] = useState([]);
+  const [view, setView] = useState("CONNECTING");
   
   socket.addEventListener('message', function (event) {
-      console.log('Message from server ', event.data);
       const data = JSON.parse(event.data)
-      if (data.TYPE === "LOAD_ROOMS") {
-        setRooms(data.DATA)
+      switch (data.TYPE) {
+        case "CONNECTED":
+          setView("LOGIN")
+          break;
+        case "LOAD_ROOMS":
+          setRooms(data.DATA)
+          break;
       }
       return false;
   });
 
-  return (
-    <div>
-      <LoginScreen socket={socket}/>
-      <RoomView rooms={rooms}/>
-    </div>
-  );
+  switch (view) {
+    case "CONNECTING":
+      return <p>"CONNECTING"</p>
+    case "LOGIN":
+      return <LoginScreen socket={socket}/>
+    case "iNMiefe":
+      return <RoomList rooms={rooms}/>
+  }
 }
 
 const LoginScreen = (props) => {
   const [inputText, setInputedText] = useState("");
 
   const login = () => {
-    props.socket.send(inputText)
+    const data = {"TYPE": "LOGIN", "DATA": inputText}
+    props.socket.send(JSON.stringify(data))
   }
 
   return (
@@ -75,7 +82,7 @@ const LoginScreen = (props) => {
   )
 }
 
-const RoomView = (props) => {
+const RoomList = (props) => {
   console.log(props.rooms)
 
   return (
@@ -98,6 +105,10 @@ const TextInput = (props) => {
 const Button = (props) => {
   return <button onClick={props.clicked}>{props.text}</button>
 };
+
+const PopupBackground = (props) => {
+  
+}
 
 function animate() {
   requestAnimationFrame(animate);
