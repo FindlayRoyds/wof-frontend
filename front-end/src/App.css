@@ -8,3 +8,10 @@ canvas {
 p {
   color: white;
 }
+
+.room-item {
+  border-radius: 10px;
+  background-color: white;
+  padding: 5px;
+  margin: 5px;
+}

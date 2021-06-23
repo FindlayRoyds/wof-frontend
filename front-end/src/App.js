@@ -41,6 +41,7 @@ let socket = new WebSocket(websocketURL)
 
 const App = () => {
   const [rooms, setRooms] = useState([]);
+  const [roomData, setRoomData] = useState("didn't update");
   const [view, setView] = useState("CONNECTING");
   
   socket.addEventListener('message', function (event) {
@@ -50,7 +51,14 @@ const App = () => {
           setView("LOGIN")
           break;
         case "LOAD_ROOMS":
-          setRooms(data.DATA)
+          if (view === "ROOM_LIST") {
+            setRooms(data.DATA)
+          }
+          
+          break;
+        case "JOINED_ROOM":
+          setView("ROOM_VIEW")
+          setRoomData(data.DATA)
           break;
       }
       return false;
@@ -58,11 +66,18 @@ const App = () => {
 
   switch (view) {
     case "CONNECTING":
-      return <p>"CONNECTING"</p>
+      return <p>CONNECTING</p>
     case "LOGIN":
-      return <LoginScreen socket={socket}/>
-    case "iNMiefe":
-      return <RoomList rooms={rooms}/>
+      return <LoginScreen socket={socket} setView={setView}/>
+    case "ROOM_LIST":
+      return (<>
+        <button onClick={() => {setView("ROOM_CREATOR")}}>Create Game</button>
+        <RoomList rooms={rooms}/>
+      </>)
+    case "ROOM_CREATOR":
+      return <RoomCreator socket={socket}/>
+    case "ROOM_VIEW":
+      return <RoomView roomName={roomData}/>
   }
 }
 
@@ -71,27 +86,67 @@ const LoginScreen = (props) => {
 
   const login = () => {
     const data = {"TYPE": "LOGIN", "DATA": inputText}
+    props.setView("ROOM_LIST")
     props.socket.send(JSON.stringify(data))
   }
 
   return (
-    <div>
+    <>
       <TextInput text={inputText} onTextInput={(event) => {setInputedText(event.target.value)}}/>
-      <Button text="Enter Name" clicked={() => {login()}}/>
-    </div>
+      <button onClick={() => {login()}}>Enter Name</button>
+    </>
+  )
+}
+
+const RoomCreator = (props) => {
+  const [roomName, setRoomName] = useState("");
+
+  const createRoom = () => {
+    const data = {"TYPE": "CREATE_ROOM", "DATA": roomName}
+    props.socket.send(JSON.stringify(data))
+    console.log("creating room")
+  }
+
+  return (<>
+    <TextInput text={roomName} onTextInput={(event) => {setRoomName(event.target.value)}}/>
+    <button onClick={() => {createRoom()}}>Create Room</button>
+  </>);
+}
+
+const RoomView = (props) => {
+  return (
+    <p>
+      {props.roomName}
+    </p>
   )
 }
 
 const RoomList = (props) => {
-  console.log(props.rooms)
+  return (
+    <>
+      
+      {props.rooms.map((room) => 
+        <RoomListItem roomName={room}/>
+      )}
+    </>
+  )
+}
+
+const RoomCreationButton = (props) => {
+  const [inputText, setInputedText] = useState("");
 
   return (
-    <div>
-      {props.rooms.map((room) => 
-        <p>
-          {room}
-        </p>
-      )}
+    <>
+      <TextInput text={inputText} onTextInput={(event) => {setInputedText(event.target.value)}}/>
+      <button onClick={() => {}}>Create Room</button>
+    </>
+  )
+}
+
+const RoomListItem = (props) => {
+  return (
+    <div class="room-item">
+      {props.roomName}
     </div>
   )
 }
@@ -101,10 +156,6 @@ const TextInput = (props) => {
     <input value={props.text} onChange={(event) => {props.onTextInput(event)}}></input>
   )
 }
-
-const Button = (props) => {
-  return <button onClick={props.clicked}>{props.text}</button>
-};
 
 const PopupBackground = (props) => {
   
