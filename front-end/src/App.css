@@ -3,10 +3,16 @@ canvas {
   top: 0;
   left: 0;
   z-index: -1;
+  background-color: black;
+}
+
+* {
+  background-color: black;
 }
 
 p {
   color: white;
+  font-family: 'Source Code Pro', monospace;
 }
 
 .room-item {
