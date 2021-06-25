@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as three from 'three';
 
 /*socket.addEventListener('open', function (event) {
@@ -39,30 +39,53 @@ if (process.env.NODE_ENV === "development") {
 console.log("connecting to socket")
 let socket = new WebSocket(websocketURL)
 
-const App = () => {
-  const [rooms, setRooms] = useState([]);
-  const [roomData, setRoomData] = useState("didn't update");
+/*const App = () => {
+  const [text, setText] = useState("stage 1");
+
+  return (<>
+    <p>{text}</p>
+    <button onClick={() => {setText("stage 2")}}>Press</button>
+  </>);
+}*/
+
+const App = (props) => {
+  /*const [rooms, setRooms] = useState([]);
+  const [roomData, setRoomData] = useState({});
+  const [roomConnected, setRoomConnected] = useState([]);
   const [view, setView] = useState("CONNECTING");
   
-  socket.addEventListener('message', function (event) {
+  useEffect(() => {
+    socket.addEventListener('message', function (event) {
+      console.log('recieved data')
       const data = JSON.parse(event.data)
       switch (data.TYPE) {
         case "CONNECTED":
           setView("LOGIN")
+          console.log('set to login')
           break;
         case "LOAD_ROOMS":
           if (view === "ROOM_LIST") {
             setRooms(data.DATA)
+          } else {
+            console.log(view)
           }
           
           break;
         case "JOINED_ROOM":
+          setRoomData(data.DATA.ROOM_DATA)
+          setRoomConnected(data.DATA.CONNECTED_LIST)
           setView("ROOM_VIEW")
-          setRoomData(data.DATA)
+          console.log('set to room view')
+          break;
+        case "ROOM_CONNECTED_UPDATE":
+          setRoomConnected(data.DATA)
           break;
       }
+      lastData = data
       return false;
-  });
+    });
+  }, [])
+  
 
   switch (view) {
     case "CONNECTING":
@@ -72,12 +95,70 @@ const App = () => {
     case "ROOM_LIST":
       return (<>
         <button onClick={() => {setView("ROOM_CREATOR")}}>Create Game</button>
-        <RoomList rooms={rooms}/>
+        <RoomList rooms={rooms} socket={socket}/>
       </>)
     case "ROOM_CREATOR":
       return <RoomCreator socket={socket}/>
     case "ROOM_VIEW":
-      return <RoomView roomName={roomData}/>
+      return <RoomView roomData={roomData} connected={roomConnected}/>
+  }*/
+
+  const [data, setData] = useState();
+  const [view, setView] = useState("CONNECTING");
+  const [rooms, setRooms] = useState([]);
+  const [roomData, setRoomData] = useState({});
+  const [roomConnected, setRoomConnected] = useState([]);
+
+  useEffect(() => {
+    socket.addEventListener('message', function (event) {
+      console.log(event.data)
+      const websocketData = JSON.parse(event.data)
+      setData(websocketData)
+
+      return false;
+    });
+  }, [])
+
+  if (typeof data !== 'undefined' & data !== null) {
+    const tempData = data
+    setData(null)
+    switch (data.TYPE) {
+      case "CONNECTED":
+        setView("LOGIN")
+        break;
+      case "LOAD_ROOMS":
+        if (view === "ROOM_LIST" || view === "ROOM_VIEW") {
+          setRooms(data.DATA)
+          setView("ROOM_LIST")
+        } else {
+          console.log(view)
+        }
+        break;
+      case "JOINED_ROOM":
+        setRoomData(data.DATA)
+        //setRoomConnected(data.DATA.CONNECTED_LIST)
+        setView("ROOM_VIEW")
+        break;
+      case "ROOM_CONNECTED_UPDATE":
+        setRoomConnected(data.DATA)
+        break;
+    }
+  }
+
+  switch (view) {
+    case "CONNECTING":
+      return <p>CONNECTING</p>
+    case "LOGIN":
+      return <LoginScreen socket={socket} setView={setView}/>
+    case "ROOM_LIST":
+      return (<>
+        <button onClick={() => {setView("ROOM_CREATOR")}}>Create Game</button>
+        <RoomList rooms={rooms} socket={socket}/>
+      </>)
+    case "ROOM_CREATOR":
+      return <RoomCreator socket={socket}/>
+    case "ROOM_VIEW":
+      return <RoomView roomData={roomData} connected={roomConnected} socket={socket}/>
   }
 }
 
@@ -104,7 +185,6 @@ const RoomCreator = (props) => {
   const createRoom = () => {
     const data = {"TYPE": "CREATE_ROOM", "DATA": roomName}
     props.socket.send(JSON.stringify(data))
-    console.log("creating room")
   }
 
   return (<>
@@ -114,39 +194,43 @@ const RoomCreator = (props) => {
 }
 
 const RoomView = (props) => {
-  return (
-    <p>
-      {props.roomName}
-    </p>
-  )
+  const [ready, setReady] = useState(false);
+
+  const leaveRoom = () => {
+    const data = {"TYPE": "LEAVE_ROOM"}
+    props.socket.send(JSON.stringify(data))
+  }
+
+  return (<>
+    <p>{props.roomData.NAME}</p>
+    {props.connected.map((client) =>
+      <p>{client}</p>
+    )}
+    <button onClick={() => {leaveRoom()}}>Leave Room</button>
+    <button onClick={() => {setReady(!ready)}}>{ready ? "Unready" : "Play"}</button>
+  </>)
 }
 
 const RoomList = (props) => {
   return (
     <>
-      
-      {props.rooms.map((room) => 
-        <RoomListItem roomName={room}/>
+      {props.rooms.map((roomData) => 
+        <RoomListItem roomName={roomData.NAME} roomHash={roomData.HASH} socket={props.socket}/>
       )}
     </>
   )
 }
 
-const RoomCreationButton = (props) => {
-  const [inputText, setInputedText] = useState("");
-
-  return (
-    <>
-      <TextInput text={inputText} onTextInput={(event) => {setInputedText(event.target.value)}}/>
-      <button onClick={() => {}}>Create Room</button>
-    </>
-  )
-}
-
 const RoomListItem = (props) => {
+  const joinRoom = () => {
+    const data = {"TYPE": "JOIN_ROOM", "DATA": props.roomHash}
+    props.socket.send(JSON.stringify(data))
+  }
+
   return (
-    <div class="room-item">
+    <div className="room-item">
       {props.roomName}
+      <button onClick={() => {joinRoom()}}>Join Room</button>
     </div>
   )
 }
@@ -155,10 +239,6 @@ const TextInput = (props) => {
   return (
     <input value={props.text} onChange={(event) => {props.onTextInput(event)}}></input>
   )
-}
-
-const PopupBackground = (props) => {
-  
 }
 
 function animate() {
