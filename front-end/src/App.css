@@ -1,17 +1,9 @@
 canvas {
-  position:fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  background-color: black;
-}
-
-* {
   background-color: black;
 }
 
 p {
-  color: white;
+  color: black;
   font-family: 'Source Code Pro', monospace;
 }
 
@@ -20,4 +12,13 @@ p {
   background-color: white;
   padding: 5px;
   margin: 5px;
+}
+
+.help {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }

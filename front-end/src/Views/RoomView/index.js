@@ -9,8 +9,8 @@ const RoomView = (props) => {
     }
 
     const changeReady = () => {
+      const data = {"TYPE": "CHANGE_READY", "DATA": !ready}
       setReady(!ready)
-      const data = {"TYPE": "CHANGE_READY", "DATA": ready}
       props.socket.send(JSON.stringify(data))
     }
   

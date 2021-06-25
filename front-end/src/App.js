@@ -1,4 +1,4 @@
-/*import './App.css';
+import './App.css';
 import { useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber'
 
@@ -9,7 +9,7 @@ import RoomList from "./Views/RoomList"
 import RoomCreator from "./Views/RoomCreator"
 import RoomView from "./Views/RoomView"
 
-import CanvasH from "./TheejsComponents/Canvas"*/
+import BackgroundCanvas from "./TheejsComponents/Canvas"
 
 /*const scene = new three.Scene();
 const camera = new three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -33,7 +33,7 @@ pointLight.position.set(25, 25, 25)
 const ambientLight = new three.AmbientLight(0x161616);
 scene.add(pointLight, ambientLight)*/
 
-/*let websocketURL = "wss://findlay-wof-backend.herokuapp.com/0.0.0.0"
+let websocketURL = "wss://findlay-wof-backend.herokuapp.com/0.0.0.0"
 if (process.env.NODE_ENV === "development") {
   websocketURL = "ws://localhost:5555"
 }
@@ -98,7 +98,9 @@ const App = (props) => {
     case "LOGIN":
       return (<>
         <LoginView socket={socket} setView={setView}/>
-        
+        <div className="help">
+          <BackgroundCanvas/>
+        </div>
       </>);
     case "ROOM_LIST":
       return <RoomList setView={setView} socket={socket} rooms={rooms}/>
@@ -109,7 +111,7 @@ const App = (props) => {
     case "ROOM_VIEW":
       return <RoomView roomData={roomData} connected={roomConnected} socket={socket}/>
   }
-}*/
+}
 
 /*function animate() {
   requestAnimationFrame(animate);
@@ -121,54 +123,6 @@ const App = (props) => {
   renderer.render(scene, camera)
 }*/
 
-//export default App;
+export default App;
 
 //animate()
-
-import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
-import "./App.css";
-
-const Box = (props) => {
-  // This reference will give us direct access to the mesh
-  const mesh = useRef();
-
-  // Set up state for the hovered and active state
-  const [active, setActive] = useState(false);
-
-  // Rotate mesh every frame, this is outside of React without overhead
-  useFrame(() => {
-    mesh.current.rotation.x = mesh.current.rotation.y += 0.01;
-  });
-
-  return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={active ? [2, 2, 2] : [1.5, 1.5, 1.5]}
-      onClick={(e) => setActive(!active)}
-    >
-      <boxBufferGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial
-        attach="material"
-        transparent
-        side={THREE.DoubleSide}
-      ></meshBasicMaterial>
-    </mesh>
-  );
-};
-
-const App = () => {
-  return (
-    <Canvas>
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[-10, -10, -10]} />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[2.5, 0, 0]} />
-    </Canvas>
-  );
-};
-
-export default App;
