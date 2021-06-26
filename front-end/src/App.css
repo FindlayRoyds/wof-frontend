@@ -2,9 +2,52 @@ canvas {
   background-color: black;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 p {
   color: black;
-  font-family: 'Source Code Pro', monospace;
+}
+
+.error-box-container {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 30%;
+  height: 20%;
+  transform: translate(-50%, -100%);
+  padding: 12px;
+}
+
+.error-box {
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  background-color: white;
+  border-radius: 12px;
+  padding: 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgrey;
+}
+
+.error-close {
+  position: absolute;
+  top: calc(100% - 24px);
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background-color: darkred;
+  border-style: none;
+  border-radius: 6px;
+  color: white;
+  padding: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.error-text {
+  color: darkred;
+  text-align: center;
 }
 
 .room-item {
@@ -14,7 +57,7 @@ p {
   margin: 5px;
 }
 
-.help {
+.background-canvas {
   position: absolute;
   height: 100%;
   width: 100%;
