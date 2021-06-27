@@ -16,8 +16,8 @@ const RoomView = (props) => {
   
     return (<>
       <p>{props.roomData.NAME}</p>
-      {props.connected.map((client) =>
-        <p>{client}</p>
+      {Object.keys(props.connected).map((key) =>
+        <p>{props.connected[key].NAME}</p>
       )}
       <button onClick={() => {leaveRoom()}}>Leave Room</button>
       <button onClick={() => {changeReady()}}>{ready ? "Unready" : "Ready Up"}</button>

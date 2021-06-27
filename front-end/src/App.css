@@ -2,12 +2,26 @@ canvas {
   background-color: black;
 }
 
-body {
+p {
   font-family: 'Inter', sans-serif;
 }
 
-p {
-  color: black;
+.stand-name {
+  position: relative;
+  display: block;
+  color: orangered;
+  font-size: 112px;
+  font-family: 'Source Code Pro', monospace;
+  text-align: center;
+}
+
+.stand-ready-status {
+  position: relative;
+  display: block;
+  font-size: 120px;
+  font-family: 'Source Code Pro', monospace;
+  text-align: center;
+  margin: 0px;
 }
 
 .error-box-container {
@@ -43,10 +57,30 @@ p {
   padding: 6px;
   padding-left: 10px;
   padding-right: 10px;
+  font-family: 'Inter', sans-serif;
 }
 
 .error-text {
   color: darkred;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.game-message-container {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 12px;
+}
+
+.game-message-text {
+  opacity: 1;
+  font-size: 32px;
+  font-family: 'Source Code Pro', monospace;
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 0px;
+  -webkit-text-stroke-color: black;
   text-align: center;
 }
 

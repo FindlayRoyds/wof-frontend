@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
+
 const ErrorBox = (props) => {
     const closeBox = () => {
         props.setDisplayError(false)
     }
-
+    
     return (
         <div className="error-box-container">
             <div className="error-box">

@@ -8,7 +8,7 @@ const LoginView = (props) => {
 
   const login = () => {
     const data = {"TYPE": "LOGIN", "DATA": inputText}
-    props.setView("ROOM_LIST")
+    //props.setView("ROOM_LIST")
     props.socket.send(JSON.stringify(data))
   }
 

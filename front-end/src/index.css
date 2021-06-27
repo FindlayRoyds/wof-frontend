@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#spinner {
+  display: block;
+  width: 0px;
+  height: 0px;
+  transition: all 3s;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  background-color: red;
+}
