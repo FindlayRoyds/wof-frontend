@@ -1,3 +1,8 @@
+/*
+LIGHTING COMPONENT
+generates the bright/cartoonish lighting style for 3d components
+*/
+
 import { Canvas } from '@react-three/fiber'
 import * as THREE from "three";
 

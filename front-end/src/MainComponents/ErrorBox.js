@@ -1,6 +1,12 @@
+/*
+ERROR BOX  
+displays server errors to the client
+*/
+
 import { useEffect, useState } from 'react'
 
 const ErrorBox = (props) => {
+    //runs when the close button is pressed
     const closeBox = () => {
         props.setDisplayError(false)
     }

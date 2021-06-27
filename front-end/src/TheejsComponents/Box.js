@@ -1,3 +1,8 @@
+/*
+BOX 3D COMPONENT
+spinning 3d box
+*/
+
 import React, { useRef } from "react";
 import { useFrame } from '@react-three/fiber'
 
@@ -5,6 +10,7 @@ const Box = (props) => {
   // This reference will give us direct access to the mesh
   const mesh = useRef()
 
+  //runs every frame, rotating the cube
   useFrame(() => {
     mesh.current.rotation.x = mesh.current.rotation.y += 0.01;
   });

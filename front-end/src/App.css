@@ -1,11 +1,24 @@
+/* sets the background of the 3d viewport to black */
 canvas {
   background-color: black;
 }
 
+/* default font */
 p {
   font-family: 'Inter', sans-serif;
 }
 
+/* 3d phrase display */
+.phrase-display {
+  position: relative;
+  display: block;
+  color: black;
+  font-size: 180px;
+  font-family: 'Source Code Pro', monospace;
+  text-align: center;
+}
+
+/* name on stand */
 .stand-name {
   position: relative;
   display: block;
@@ -15,6 +28,18 @@ p {
   text-align: center;
 }
 
+/* score displayed on stand */
+.stand-score {
+  position: relative;
+  display: block;
+  font-size: 120px;
+  font-family: 'Source Code Pro', monospace;
+  text-align: center;
+  margin: 0px;
+  color: limegreen;
+}
+
+/* ready status on stand */
 .stand-ready-status {
   position: relative;
   display: block;
@@ -24,6 +49,7 @@ p {
   margin: 0px;
 }
 
+/* main container for error box */
 .error-box-container {
   position: absolute;
   top: 100%;
@@ -34,6 +60,7 @@ p {
   padding: 12px;
 }
 
+/* visible error box div */
 .error-box {
   width: calc(100% - 24px);
   height: calc(100% - 24px);
@@ -45,6 +72,7 @@ p {
   border-color: lightgrey;
 }
 
+/* close button for error box */
 .error-close {
   position: absolute;
   top: calc(100% - 24px);
@@ -60,13 +88,16 @@ p {
   font-family: 'Inter', sans-serif;
 }
 
+/* text in error box */
 .error-text {
   color: darkred;
   text-align: center;
   font-family: 'Inter', sans-serif;
 }
 
+/* container for the messages in games */
 .game-message-container {
+  pointer-events: none;
   position: absolute;
   top: 0%;
   left: 50%;
@@ -74,6 +105,7 @@ p {
   padding: 12px;
 }
 
+/* text displayed when message recieved from server */
 .game-message-text {
   opacity: 1;
   font-size: 32px;
@@ -84,6 +116,7 @@ p {
   text-align: center;
 }
 
+/* styling for room list item */
 .room-item {
   border-radius: 10px;
   background-color: white;
@@ -91,6 +124,7 @@ p {
   margin: 5px;
 }
 
+/* styling for full screen canvas */
 .background-canvas {
   position: absolute;
   height: 100%;

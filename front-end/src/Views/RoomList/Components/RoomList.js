@@ -1,3 +1,9 @@
+/*
+ROOM LIST COMPONENT
+loaded by the room list view
+*/
+
+//imports the room list item from the room_list specific components
 import RoomListItem from "./RoomListItem";
 
 const RoomList = (props) => {

@@ -1,11 +1,17 @@
+/*
+LOGIN VIEW
+this page is displayed when the client is logging in
+*/
+
 import { useState } from "react"
 
+//gets the text input component
 import TextInput from "./../../MainComponents/TextInput";
-import Box from "./../../TheejsComponents/Box"
 
 const LoginView = (props) => {
   const [inputText, setInputedText] = useState("");
 
+  //runs when the player submits a username
   const login = () => {
     const data = {"TYPE": "LOGIN", "DATA": inputText}
     //props.setView("ROOM_LIST")

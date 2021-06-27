@@ -1,3 +1,8 @@
+/*
+GAME MESSAGE COMPONENT
+displays game messages from the server
+*/
+
 import { useEffect, useState } from 'react'
 
 const GameMessage = (props) => {
