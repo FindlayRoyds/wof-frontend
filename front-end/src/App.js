@@ -4,27 +4,27 @@ responsible for bring together all of the content in the front-end
 */
 
 import './App.css';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber'
 import * as THREE from "three";
 
-import ErrorBox from './MainComponents/ErrorBox';
-import GameMessage from './MainComponents/GameMessage';
+import ErrorBox from React.lazy(() => import('./MainComponents/ErrorBox'))
+import GameMessage from React.lazy(() => import('./MainComponents/GameMessage'))
 
-import ConnectingView from "./Views/Connecting"
-import DisconnectedView from "./Views/Disconnected"
-import LoginView from "./Views/Login"
-import RoomList from "./Views/RoomList"
-import RoomCreator from "./Views/RoomCreator"
-import RoomView from "./Views/RoomView"
-import GameView from "./Views/GameView"
+import ConnectingView from React.lazy(() => import("./Views/Connecting"))
+import DisconnectedView from React.lazy(() => import("./Views/Disconnected"))
+import LoginView from React.lazy(() => import("./Views/Login"))
+import RoomList from React.lazy(() => import("./Views/RoomList"))
+import RoomCreator from React.lazy(() => import("./Views/RoomCreator"))
+import RoomView from React.lazy(() => import("./Views/RoomView"))
+import GameView from React.lazy(() => import("./Views/GameView"))
 
-import Box from "./TheejsComponents/Box"
-import Wheel from "./TheejsComponents/Wheel"
-import Lighting from "./TheejsComponents/Lighting"
-import Stand from "./TheejsComponents/Stand"
-import Room from "./TheejsComponents/Stage"
-import Board from "./TheejsComponents/Board"
+import Box from React.lazy(() => import("./TheejsComponents/Box"))
+import Wheel from React.lazy(() => import("./TheejsComponents/Wheel"))
+import Lighting from React.lazy(() => import("./TheejsComponents/Lighting"))
+import Stand from React.lazy(() => import("./TheejsComponents/Stand"))
+import Room from React.lazy(() => import("./TheejsComponents/Stage"))
+import Board from React.lazy(() => import("./TheejsComponents/Board"))
 
 //creates websocket based on whether the app is deployed or not
 let websocketURL = "wss://findlay-wof-backend.herokuapp.com/0.0.0.0"
@@ -175,10 +175,18 @@ const App = (props) => {
     switch (param) {
       case "CONNECTING":
         //connecting page
-        return <ConnectingView />
+        return (<>
+          <Suspense fallback={<div>Loading...</div>}>
+            <ConnectingView />
+          </Suspense>
+        </>)
       case "DISCONNECTED":
         //disconnected page
-        return <DisconnectedView />
+        return (<>
+          <Suspense fallback={<div>Loading...</div>}>
+            <DisconnectedView />
+          </Suspense>
+        </>)
       case "LOGIN":
         //login page
         return (<>
