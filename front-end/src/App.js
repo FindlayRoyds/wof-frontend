@@ -176,6 +176,7 @@ const App = (props) => {
       case "CONNECTING":
         //connecting page
         return <ConnectingView />
+        //return <div>connecting</div>
       case "DISCONNECTED":
         //disconnected page
         return <DisconnectedView />
@@ -206,11 +207,11 @@ const App = (props) => {
     switch (param) {
       case "CONNECTING":
         //connecting page
-        return (<>
+        /*return (<>
           <Box position={[0, 0, 0]} />
           <Box position={[-2, 0, 0]} />
           <Box position={[2, 0, 0]} />
-        </>)
+        </>)*/
       case "ROOM_VIEW":
         //in a lobby / room view
         const totalClients = Object.size(roomConnected)
@@ -264,17 +265,20 @@ const App = (props) => {
     {renderSwitch(view)}
     {displayError ? <ErrorBox setDisplayError={setDisplayError} message={errorMessage} /> : null}
     {showGameMessage ? <GameMessage message={gameMessage} /> : null}
-    <div className="background-canvas">
-      <Canvas
-        camera={
-          { fov: 71, position: [0, 2.5, 8], rotation: [1, 1, 1] }
-        }>
-        <Lighting />
-        {threeSwitch(view)}
-        <Wheel spinner={spinner} spin={spinConstantly} position={[0, -2, 0]} />
-        <Room scale={[10, 10, 10]} position={[0, -2.35, 0]} />
-      </Canvas>
-    </div>
+    {view !== "CONNECTING" ?
+      <div className="background-canvas">
+        <Canvas
+          camera={
+            { fov: 71, position: [0, 2.5, 8], rotation: [1, 1, 1] }
+          }>
+          <Lighting />
+          {threeSwitch(view)}
+          <Wheel spinner={spinner} spin={spinConstantly} position={[0, -2, 0]} />
+          <Room scale={[10, 10, 10]} position={[0, -2.35, 0]} />
+        </Canvas>
+      </div>
+      : <div></div>
+    }
   </>)
 }
 
